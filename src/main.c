@@ -5,9 +5,9 @@
 #include "BatteryManager.h"
 
 BatteryManager b_manager = {2,   // maxCapacity;
-                            2.5, // minVoltage;
+                            3, // minVoltage;
                             4.2, // maxVoltage;
-                            3,   // currentVoltage;
+                            3.7,   // currentVoltage;
                             15,  // maxOutputCurrent;
                             4.2, // chargingVoltage;
                             2,   // maxChargingCurrent;

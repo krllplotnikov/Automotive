@@ -62,6 +62,7 @@ uint8_t chargeBattery(BatteryManager *batteryManager, double voltage, double cur
 {
     uint8_t returnCode = 0;
     static time_t sec = 0;
+    double currentCurrent = current;
     if (batteryManager->isChargerConnected)
     {
         if (voltage < (batteryManager->chargingVoltage - 0.1) || voltage > (batteryManager->chargingVoltage + 0.1))
@@ -78,9 +79,27 @@ uint8_t chargeBattery(BatteryManager *batteryManager, double voltage, double cur
         {
             if (time(NULL) > sec)
             {
-                if ((batteryManager->currentVoltage + current / batteryManager->maxCapacity * 0.0002777) < batteryManager->maxVoltage)
+                if (getStateOfCharge(batteryManager) < 5)
                 {
-                    batteryManager->currentVoltage += current / batteryManager->maxCapacity * 0.0002777;
+                    if (current > batteryManager->maxChargingCurrent / 10)
+                        currentCurrent = batteryManager->maxChargingCurrent / 10;
+                    else
+                        currentCurrent = current;
+                }
+                if (getStateOfCharge(batteryManager) > 5 && getStateOfCharge(batteryManager) < 85)
+                {
+                    currentCurrent = current;
+                }
+                if (getStateOfCharge(batteryManager) > 85)
+                {
+                    if (current > batteryManager->maxChargingCurrent / 5)
+                        currentCurrent = batteryManager->maxChargingCurrent / 5;
+                    else
+                        currentCurrent = current;
+                }
+                if ((batteryManager->currentVoltage + currentCurrent / batteryManager->maxCapacity * 0.0002777) < batteryManager->maxVoltage)
+                {
+                    batteryManager->currentVoltage += currentCurrent / batteryManager->maxCapacity * 0.0002777;
                     sec = time(NULL);
                     returnCode = BATTERY_CHARGING;
                 }
