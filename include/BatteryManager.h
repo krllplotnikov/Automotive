@@ -9,7 +9,7 @@
 
 typedef struct 
 {
-    double maxCapacity;
+    double capacity;
     double minVoltage;
     double maxVoltage;
     double currentVoltage;

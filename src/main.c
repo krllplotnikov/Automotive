@@ -4,7 +4,7 @@
 #include <pthread.h>
 #include "BatteryManager.h"
 
-BatteryManager b_manager = {2,   // maxCapacity;
+BatteryManager b_manager = {2,   // capacity;
                             3,   // minVoltage;
                             4.2, // maxVoltage;
                             3.7, // currentVoltage;

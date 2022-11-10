@@ -18,7 +18,7 @@ double getStateOfCharge(BatteryManager *batteryManager)
 
 double getBatteryCapacity(BatteryManager *batteryManager)
 {
-    return batteryManager->maxCapacity;
+    return batteryManager->capacity;
 }
 
 uint8_t connectCharger(BatteryManager *batteryManager, double voltage, double current)
@@ -97,14 +97,16 @@ uint8_t chargeBattery(BatteryManager *batteryManager, double voltage, double cur
                     else
                         currentCurrent = current;
                 }
-                if ((batteryManager->currentVoltage + currentCurrent / batteryManager->maxCapacity * 0.0002777) < batteryManager->maxVoltage)
+                if ((batteryManager->currentVoltage + currentCurrent / batteryManager->capacity * 0.0002777) < batteryManager->maxVoltage)
                 {
-                    batteryManager->currentVoltage += currentCurrent / batteryManager->maxCapacity * 0.0002777;
+                    batteryManager->currentVoltage += currentCurrent / batteryManager->capacity * 0.0002777;
                     sec = time(NULL);
                     returnCode = BATTERY_CHARGING;
                 }
                 else
                 {
+                    disconnectCharger(batteryManager);
+                    printf("Battery is full\n");
                     returnCode = BATTERY_FULL;
                     goto Exit;
                 }
@@ -122,13 +124,13 @@ uint8_t connectLoad(BatteryManager *batteryManager, double voltage, double curre
     static time_t sec = 0;
     if (voltage < (batteryManager->chargingVoltage - 0.1) || voltage > (batteryManager->chargingVoltage + 0.1))
     {
-        printf("Incorrect charging voltage\n");
+        printf("Incorrect load voltage\n");
         returnCode = INCORRECT_VOLTAGE;
         goto Exit;
     }
     else if (current > batteryManager->maxOutputCurrent)
     {
-        printf("Incorrect charging current\n");
+        printf("Incorrect load current\n");
         returnCode = INCORRECT_CURRENT;
         goto Exit;
     }
@@ -172,9 +174,9 @@ uint8_t unchargeBattery(BatteryManager *batteryManager, double voltage, double c
     {
         if (time(NULL) > sec)
         {
-            if ((batteryManager->currentVoltage - current / batteryManager->maxCapacity * 0.0002777) > batteryManager->minVoltage)
+            if ((batteryManager->currentVoltage - current / batteryManager->capacity * 0.0002777) > batteryManager->minVoltage)
             {
-                batteryManager->currentVoltage -= current / batteryManager->maxCapacity * 0.0002777;
+                batteryManager->currentVoltage -= current / batteryManager->capacity * 0.0002777;
                 sec = time(NULL);
                 returnCode = BATTERY_UNCHARGING;
             }
