@@ -5,13 +5,14 @@
 #include "BatteryManager.h"
 
 BatteryManager b_manager = {2,   // maxCapacity;
-                            2.5, // minBatteryVoltage;
-                            4.2, // maxBatteryVoltage;
-                            4,   // currentBatteryVoltage;
-                            15,  // maxBatteryCurrent;
+                            2.5, // minVoltage;
+                            4.2, // maxVoltage;
+                            3,   // currentVoltage;
+                            15,  // maxOutputCurrent;
                             4.2, // chargingVoltage;
                             2,   // maxChargingCurrent;
-                            0};  // isChargerConnected;
+                            0,   // isChargerConnected;
+                            0};  // isLoadConnected;
 
 void parse();
 char ch[10];
@@ -26,9 +27,21 @@ void *consoleTask()
     }
 }
 
+/*--command list--
+c,(volt),(cur) - connect charger
+d - disconnect charger
+% - state of charge
+v - battery voltage
+l,(volt),(cur) - connect load
+u - disconnect load
+a - battey capacity A/h
+p - print all information
+*/
+
 void *b_managerTask()
 {
     double chargingVoltage, chargingCurrent;
+    double loadVoltage, loadCurrent;
     while (1)
     {
         switch (parsedCh[0][0])
@@ -59,25 +72,64 @@ void *b_managerTask()
             parsedCh[0][0] = 0;
             break;
         }
+        case 'l':
+        {
+            loadVoltage = atof(parsedCh[1]);
+            loadCurrent = atof(parsedCh[2]);
+            connectLoad(&b_manager, loadVoltage, loadCurrent);
+            parsedCh[0][0] = 0;
+            break;
+        }
+        case 'u':
+        {
+            disconnectLoad(&b_manager);
+            parsedCh[0][0] = 0;
+            break;
+        }
+        case 'a':
+        {
+            printf("Battery capacity = %.3fA/h\n", getBatteryCapacity(&b_manager));
+            parsedCh[0][0] = 0;
+            break;
+        }
+        case 'p':
+        {
+            printf("----------\n");
+            printf("Battery max voltage = %.2fV\n", b_manager.maxVoltage);
+            printf("Battery min voltage = %.2fV\n", b_manager.minVoltage);
+            printf("Battery max output current = %.2fA\n", b_manager.maxOutputCurrent);
+            printf("Battery max charging current = %.2fA\n", b_manager.maxChargingCurrent);
+            printf("Battery voltage = %.2fV\n", getBatteryVoltage(&b_manager));
+            printf("Battery SoC = %.2f%%\n", getStateOfCharge(&b_manager));
+            printf("Battery voltage = %.2fV\n", getBatteryVoltage(&b_manager));
+            printf("Battery capacity = %.3fA/h\n", getBatteryCapacity(&b_manager));
+            printf("Battery charger connected = %d\n", b_manager.isChargerConnected);
+            printf("Battery load connected = %d\n", b_manager.isLoadConnected);
+            printf("----------\n");
+            parsedCh[0][0] = 0;
+            break;
+        }
         }
 
         if (b_manager.isChargerConnected)
         {
             chargeBattery(&b_manager, chargingVoltage, chargingCurrent);
         }
+        if (b_manager.isLoadConnected)
+        {
+            unchargeBattery(&b_manager, loadVoltage, loadCurrent);
+        }
     }
 }
 
 int main()
 {
-    pthread_t t1, t2;
-    pthread_create(&t1, NULL, &consoleTask, NULL);
-    pthread_create(&t2, NULL, &b_managerTask, NULL);
-    pthread_join(t1, NULL);
-    pthread_join(t2, NULL);
+    pthread_t consoleThread, b_managerThread;
+    pthread_create(&consoleThread, NULL, &consoleTask, NULL);
+    pthread_create(&b_managerThread, NULL, &b_managerTask, NULL);
+    pthread_join(consoleThread, NULL);
+    pthread_join(b_managerThread, NULL);
 }
-
-
 
 void parse()
 {
