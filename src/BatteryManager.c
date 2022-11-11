@@ -122,7 +122,7 @@ uint8_t connectLoad(BatteryManager *batteryManager, double voltage, double curre
 {
     uint8_t returnCode = 0;
     static time_t sec = 0;
-    if (voltage < (batteryManager->chargingVoltage - 0.1) || voltage > (batteryManager->chargingVoltage + 0.1))
+    if (voltage < (batteryManager->nominalVoltage - 0.1) || voltage > (batteryManager->nominalVoltage + 0.1))
     {
         printf("Incorrect load voltage\n");
         returnCode = INCORRECT_VOLTAGE;
@@ -160,7 +160,7 @@ uint8_t unchargeBattery(BatteryManager *batteryManager, double voltage, double c
 {
     uint8_t returnCode = 0;
     static time_t sec = 0;
-    if (voltage < (batteryManager->chargingVoltage - 0.1) || voltage > (batteryManager->chargingVoltage + 0.1))
+    if (voltage < (batteryManager->nominalVoltage - 0.1) || voltage > (batteryManager->nominalVoltage + 0.1))
     {
         returnCode = INCORRECT_VOLTAGE;
         goto Exit;

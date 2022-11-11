@@ -5,6 +5,7 @@
 #include "BatteryManager.h"
 
 BatteryManager b_manager = {2,   // capacity;
+                            3.7, // double nominalVoltage;
                             3,   // minVoltage;
                             4.2, // maxVoltage;
                             3.7, // currentVoltage;
@@ -95,6 +96,7 @@ void *b_managerTask()
         case 'p':
         {
             printf("----------\n");
+            printf("Battery nominal voltage = %.2fV\n", b_manager.nominalVoltage);
             printf("Battery max voltage = %.2fV\n", b_manager.maxVoltage);
             printf("Battery min voltage = %.2fV\n", b_manager.minVoltage);
             printf("Battery max output current = %.2fA\n", b_manager.maxOutputCurrent);

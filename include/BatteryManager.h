@@ -10,6 +10,7 @@
 typedef struct 
 {
     double capacity;
+    double nominalVoltage;
     double minVoltage;
     double maxVoltage;
     double currentVoltage;

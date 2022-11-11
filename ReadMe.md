@@ -17,6 +17,7 @@ ____
 typedef struct 
 {
     double capacity;
+    double nominalVoltage;
     double minVoltage;
     double maxVoltage;
     double currentVoltage;
@@ -30,6 +31,8 @@ typedef struct
 } BatteryManager;
 ```
 *capacity* - номинальная емкость батареи
+
+*nominalVoltage* - номинальное напряжение батареи
 
 *minVoltage* - минимальное допустимое напряжение батареи
 
