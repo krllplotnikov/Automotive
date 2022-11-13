@@ -101,7 +101,6 @@ void *b_managerTask()
             printf("Battery min voltage = %.2fV\n", b_manager.minVoltage);
             printf("Battery max output current = %.2fA\n", b_manager.maxOutputCurrent);
             printf("Battery max charging current = %.2fA\n", b_manager.maxChargingCurrent);
-            printf("Battery voltage = %.2fV\n", getBatteryVoltage(&b_manager));
             printf("Battery SoC = %.2f%%\n", getStateOfCharge(&b_manager));
             printf("Battery voltage = %.2fV\n", getBatteryVoltage(&b_manager));
             printf("Battery capacity = %.3fA/h\n", getBatteryCapacity(&b_manager));
