@@ -56,11 +56,11 @@ double getBatteryCapacity(BatteryManager* batteryManager);
 double getStateOfCharge(BatteryManager* batteryManager);
 
 uint8_t connectCharger(BatteryManager* batteryManager, double voltage, double current);
-void disconnectCharger(BatteryManager* batteryManager);
+uint8_t disconnectCharger(BatteryManager* batteryManager);
 uint8_t chargeBattery(BatteryManager* batteryManager, double voltage, double current);
 
 uint8_t connectLoad(BatteryManager* batteryManager, double voltage, double current);
-void disconnectLoad(BatteryManager* batteryManager);
+uint8_t disconnectLoad(BatteryManager* batteryManager);
 uint8_t unchargeBattery(BatteryManager* batteryManager, double voltage, double current);
 ```
 *getBatteryVoltage()* - отримання поточної напруги батареї.

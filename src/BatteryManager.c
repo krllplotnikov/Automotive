@@ -44,18 +44,21 @@ uint8_t connectCharger(BatteryManager *batteryManager, double voltage, double cu
     }
     else
     {
-        printf("\rCharger connected\n");
+        printf("Charger connected\n");
         batteryManager->isChargerConnected = 1;
+        returnCode = CHARGER_CONNECTED;
+        goto Exit;
     }
 
 Exit:
     return returnCode;
 }
 
-void disconnectCharger(BatteryManager *batteryManager)
+uint8_t disconnectCharger(BatteryManager *batteryManager)
 {
     printf("\rCharger disconnected\n");
     batteryManager->isChargerConnected = 0;
+    return CHARGER_DISCONNECTED;
 }
 
 uint8_t chargeBattery(BatteryManager *batteryManager, double voltage, double current)
@@ -143,17 +146,20 @@ uint8_t connectLoad(BatteryManager *batteryManager, double voltage, double curre
     }
     else
     {
-        printf("\rLoad connected\n");
+        printf("Load connected\n");
         batteryManager->isLoadConnected = 1;
+        returnCode = LOAD_CONNECTED;
+        goto Exit;
     }
 
 Exit:
     return returnCode;
 }
-void disconnectLoad(BatteryManager *batteryManager)
+uint8_t disconnectLoad(BatteryManager *batteryManager)
 {
-    printf("\rLoad disconnected\n");
+    printf("Load disconnected\n");
     batteryManager->isLoadConnected = 0;
+    return LOAD_DISCONNECTED;
 }
 
 uint8_t unchargeBattery(BatteryManager *batteryManager, double voltage, double current)

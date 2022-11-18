@@ -15,9 +15,9 @@ BatteryManager b_manager = {2,   // capacity;
                             0,   // isChargerConnected;
                             0};  // isLoadConnected;
 
-void parse();
 char ch[10];
 char parsedCh[10][10];
+void parse();
 
 void *consoleTask()
 {
