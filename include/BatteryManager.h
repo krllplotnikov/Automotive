@@ -12,7 +12,7 @@ typedef enum
     CHARGER_DISCONNECTED,
     LOAD_CONNECTED,
     LOAD_DISCONNECTED
-} BatteryManager_Responces;
+} BatteryManager_Responses;
 
 typedef struct
 {

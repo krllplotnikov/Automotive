@@ -5,7 +5,7 @@
 #include "BatteryManager.h"
 
 BatteryManager b_manager = {2,   // capacity;
-                            3.7, // double nominalVoltage;
+                            3.7, // nominalVoltage;
                             3,   // minVoltage;
                             4.2, // maxVoltage;
                             3.7, // currentVoltage;
@@ -24,7 +24,7 @@ void *consoleTask()
     while (1)
     {
         scanf("%s", ch);
-        parse(ch, parsedCh);
+        parse();
     }
 }
 

@@ -1,30 +1,10 @@
-cmake_minimum_required(VERSION "3.15")
+cmake_minimum_required(VERSION 3.13)
 project(battery_manager)
 
-add_library(b_m SHARED
-	src/BatteryManager.c
-)
+add_library(bm_lib SHARED src/BatteryManager.c)
 
-target_include_directories(b_m PUBLIC
-	${CMAKE_CURRENT_SOURCE_DIR}/include
-)
+target_include_directories(bm_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-add_executable(${PROJECT_NAME}
-	src/main.c
-)
+add_executable(${PROJECT_NAME} src/main.c)
 
-target_include_directories(${PROJECT_NAME} PUBLIC
-	${CMAKE_CURRENT_SOURCE_DIR}/include>
-)
-
-target_link_libraries(${PROJECT_NAME}
-	b_m
-)
-
-install(TARGETS b_m
-	DESTINATION ~/bin/automotive/lib
-)
-
-install(TARGETS ${PROJECT_NAME}
-	DESTINATION ~/bin/automotive/bin
-)
+target_link_libraries(${PROJECT_NAME} bm_lib)

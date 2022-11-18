@@ -1,5 +1,8 @@
 #include "BatteryManager.h"
 #include <time.h>
+#include <stdio.h>
+
+#define DEBUG 1
 
 double interpolation(float x1, float x2, float fx1, float fx2, float x)
 {
@@ -26,25 +29,25 @@ uint8_t connectCharger(BatteryManager *batteryManager, double voltage, double cu
     uint8_t returnCode = 0;
     if (voltage < (batteryManager->chargingVoltage - 0.1) || voltage > (batteryManager->chargingVoltage + 0.1))
     {
+#if DEBUG
         printf("Incorrect charging voltage\n");
+#endif
         returnCode = INCORRECT_VOLTAGE;
         goto Exit;
     }
     else if (current > batteryManager->maxChargingCurrent)
     {
+#if DEBUG
         printf("Incorrect charging current\n");
+#endif
         returnCode = INCORRECT_CURRENT;
-        goto Exit;
-    }
-    else if (batteryManager->currentVoltage >= batteryManager->maxVoltage)
-    {
-        printf("Battery is full\n");
-        returnCode = BATTERY_FULL;
         goto Exit;
     }
     else
     {
+#if DEBUG
         printf("Charger connected\n");
+#endif
         batteryManager->isChargerConnected = 1;
         returnCode = CHARGER_CONNECTED;
         goto Exit;
@@ -56,7 +59,9 @@ Exit:
 
 uint8_t disconnectCharger(BatteryManager *batteryManager)
 {
-    printf("\rCharger disconnected\n");
+#if DEBUG
+    printf("Charger disconnected\n");
+#endif
     batteryManager->isChargerConnected = 0;
     return CHARGER_DISCONNECTED;
 }
@@ -100,6 +105,7 @@ uint8_t chargeBattery(BatteryManager *batteryManager, double voltage, double cur
                     else
                         currentCurrent = current;
                 }
+
                 if ((batteryManager->currentVoltage + currentCurrent / batteryManager->capacity * 0.0002777) < batteryManager->maxVoltage)
                 {
                     batteryManager->currentVoltage += currentCurrent / batteryManager->capacity * 0.0002777;
@@ -109,7 +115,9 @@ uint8_t chargeBattery(BatteryManager *batteryManager, double voltage, double cur
                 else
                 {
                     disconnectCharger(batteryManager);
+#if DEBUG
                     printf("Battery is full\n");
+#endif
                     returnCode = BATTERY_FULL;
                     goto Exit;
                 }
@@ -127,26 +135,25 @@ uint8_t connectLoad(BatteryManager *batteryManager, double voltage, double curre
     static time_t sec = 0;
     if (voltage < (batteryManager->nominalVoltage - 0.1) || voltage > (batteryManager->nominalVoltage + 0.1))
     {
+#if DEBUG
         printf("Incorrect load voltage\n");
+#endif
         returnCode = INCORRECT_VOLTAGE;
         goto Exit;
     }
     else if (current > batteryManager->maxOutputCurrent)
     {
+#if DEBUG
         printf("Incorrect load current\n");
+#endif
         returnCode = INCORRECT_CURRENT;
-        goto Exit;
-    }
-    else if (batteryManager->currentVoltage <= batteryManager->minVoltage)
-    {
-
-        printf("Battery is low\n");
-        returnCode = BATTERY_LOW;
         goto Exit;
     }
     else
     {
+#if DEBUG
         printf("Load connected\n");
+#endif
         batteryManager->isLoadConnected = 1;
         returnCode = LOAD_CONNECTED;
         goto Exit;
@@ -157,7 +164,9 @@ Exit:
 }
 uint8_t disconnectLoad(BatteryManager *batteryManager)
 {
+#if DEBUG
     printf("Load disconnected\n");
+#endif
     batteryManager->isLoadConnected = 0;
     return LOAD_DISCONNECTED;
 }
@@ -189,7 +198,9 @@ uint8_t unchargeBattery(BatteryManager *batteryManager, double voltage, double c
             else
             {
                 disconnectLoad(batteryManager);
+#if DEBUG
                 printf("Battery is low\n");
+#endif
                 returnCode = BATTERY_LOW;
                 goto Exit;
             }
