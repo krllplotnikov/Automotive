@@ -16,7 +16,8 @@ BatteryManager test_manager = {2,   // capacity;
                                2,   // maxChargingCurrent;
                                0,   // isChargerConnected;
                                0};  // isLoadConnected;
-
+BatteryManager battery = { 2.f,0,0,0,0,15,0,0 };
+Power current = { 5,2,3,2 };
 // ConnectCharger
 TEST(TestConnectCharger, BasicTest)
 {
@@ -179,7 +180,72 @@ TEST(TestUnhargeBattery, IncorrectVoltage)
 
     ASSERT_EQ(INCORRECT_VOLTAGE, unchargingStatus);
 }
+TEST(TestTypeEconom, BasicTest)
+{
+    BatteryManager battery = { 2.f,0,0,0,0,12,0 };
+    Power current = { 5,2,3,2 };
+    flaot level = 100;
+    bool state=false;
+    float ref_I = 12;
+    float I = type_econom(&battery, &current, level);
+    float delt = (abs((I - ref_I)/100) * 100);
+    
+    if (delt < 5)
+    {
+        state = true;
+    }
+    ASSERT_TRUE(state);
+}
+TEST(TestTypeEconom, Min_level)
+{
+    BatteryManager battery = { 2.f,0,0,0,0,12,0 };
+    Power current = { 5,2,3,2 };
+    flaot level = 15;
+    bool state = false;
+    float ref_I = 8;
+    float I = type_econom(&battery, &current, level);
+    float delt = (abs((I - ref_I) / 100) * 100);
+    
+    if (delt < 5)
+    {
+        state = true;
+    }
+    ASSERT_TRUE(state);
+}
+TEST(TestTypeEconom, Med_level)
+{
+    BatteryManager battery = { 2.f,0,0,0,0,12,0 };
+    Power current = { 5,2,3,2 };
+    flaot level = 15;
+    float ref_I = 10.8;
+bool state=false;
+    float I = type_econom(&battery, &current, level);
+   
+    float delt = (abs((I - ref_I) / 100) * 100);
+    
+    if (delt < 5)
+    {
+        state = true;
+    }
+    ASSERT_TRUE(state);
+}
+TEST(TestTimeWork, BasicTest)
+{
+    BatteryManager battery = { 2.f,0,0,0,0,12,0 };
+    float i = 2;
+    float l = 50;
+    float t = time_work(&battery, i, l);
+    float ref_t = 0.5;
+    bool state = false;
 
+    float delt = (abs((t - ref_t) / 100) * 100);
+
+    if (delt < 5)
+    {
+        state = true;
+    }
+    ASSERT_TRUE(state);
+}
 int main(int argc, char **argv)
 {
     testing::InitGoogleTest(&argc, argv);

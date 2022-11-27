@@ -210,3 +210,34 @@ uint8_t unchargeBattery(BatteryManager *batteryManager, double voltage, double c
 Exit:
     return returnCode;
 }
+float type_econom(BatteryManager* battery, Power* curr, float level1)
+{
+
+    float level_char, level_max;
+    float sum_current;
+    double max = battery->capacity;
+    level_char = 20;
+    float level = level1;
+    if (level < level_char)
+    {
+        sum_current = (curr->engine + curr->cooler + curr->heater + curr->ligth) * 0.75;
+        return sum_current;
+    }
+    level_max = 50;
+    if (level > level_max)
+    {
+        sum_current = curr->engine + curr->cooler + curr->heater + curr->ligth;
+        return sum_current;
+    }
+    if (level > level_char && level < level_max)
+    {
+        sum_current = (curr->engine + curr->cooler + curr->heater + curr->ligth) * 0.90;
+        return sum_current;
+    }
+}
+void time_work(BatteryManager* battery, double P, flaot level)
+{
+    double time;
+    time = (level / 100) * battery->capacity / P;
+    printf("t=%f h", time);
+}

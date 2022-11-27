@@ -14,10 +14,14 @@ BatteryManager b_manager = {2,   // capacity;
                             2,   // maxChargingCurrent;
                             0,   // isChargerConnected;
                             0};  // isLoadConnected;
+BatteryManager battery = { 2.f,0,0,0,0,15,0,0 };
+Power current = { 5,3,2,2 };
 
 char ch[10];
 char parsedCh[10][10];
 void parse();
+float I = battery.maxOutputCurrent;
+
 
 void *consoleTask()
 {
@@ -43,6 +47,7 @@ void *b_managerTask()
 {
     double chargingVoltage, chargingCurrent;
     double loadVoltage, loadCurrent;
+    float level = getStateOfCharge(battery);
     while (1)
     {
         switch (parsedCh[0][0])
@@ -110,6 +115,19 @@ void *b_managerTask()
             parsedCh[0][0] = 0;
             break;
         }
+        case 'e':
+        {
+            I = type_econom(&battery, &current, level);
+            printf("I = %f A\n", I);
+            break;
+        }
+        case 't':
+        {
+
+            time_work(&battery, I, level);
+            break;
+        }
+
         }
 
         if (b_manager.isChargerConnected)
