@@ -41,7 +41,7 @@ double getBatteryVoltage(BatteryManager* batteryManager);
 double getBatteryCapacity(BatteryManager* batteryManager);
 double getStateOfCharge(BatteryManager* batteryManager);
 float type_econom(BatteryManager* battery, Power* curr, float level1);
-void time_work(BatteryManager* battery, double P, float level);
+float time_work(BatteryManager* battery, double P, float level);
 
 
 uint8_t connectCharger(BatteryManager *batteryManager, double voltage, double current);

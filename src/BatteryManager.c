@@ -235,9 +235,10 @@ float type_econom(BatteryManager* battery, Power* curr, float level1)
         return sum_current;
     }
 }
-void time_work(BatteryManager* battery, double P, flaot level)
+float time_work(BatteryManager* battery, double P, float level)
 {
     double time;
     time = (level / 100) * battery->capacity / P;
-    printf("t=%f h", time);
+    printf("t=%f h\n", time);
+    return time;
 }

@@ -16,7 +16,7 @@ BatteryManager test_manager = {2,   // capacity;
                                2,   // maxChargingCurrent;
                                0,   // isChargerConnected;
                                0};  // isLoadConnected;
-BatteryManager battery = { 2.f,0,0,0,0,15,0,0 };
+//BatteryManager battery = { 2.f,0,0,0,0,15,0,0,0,0};
 Power current = { 5,2,3,2 };
 // ConnectCharger
 TEST(TestConnectCharger, BasicTest)
@@ -182,12 +182,12 @@ TEST(TestUnhargeBattery, IncorrectVoltage)
 }
 TEST(TestTypeEconom, BasicTest)
 {
-    BatteryManager battery = { 2.f,0,0,0,0,12,0 };
+    //BatteryManager battery = { 2.f,0,0,0,0,12,0 };
     Power current = { 5,2,3,2 };
-    flaot level = 100;
+    float level = 100;
     bool state=false;
     float ref_I = 12;
-    float I = type_econom(&battery, &current, level);
+    float I = type_econom(&test_manager, &current, level);
     float delt = (abs((I - ref_I)/100) * 100);
     
     if (delt < 5)
@@ -198,12 +198,12 @@ TEST(TestTypeEconom, BasicTest)
 }
 TEST(TestTypeEconom, Min_level)
 {
-    BatteryManager battery = { 2.f,0,0,0,0,12,0 };
+    //BatteryManager battery = { 2.f,0,0,0,0,12,0 };
     Power current = { 5,2,3,2 };
-    flaot level = 15;
+    float level = 15;
     bool state = false;
-    float ref_I = 8;
-    float I = type_econom(&battery, &current, level);
+    float ref_I = 9;
+    float I = type_econom(&test_manager, &current, level);
     float delt = (abs((I - ref_I) / 100) * 100);
     
     if (delt < 5)
@@ -214,12 +214,12 @@ TEST(TestTypeEconom, Min_level)
 }
 TEST(TestTypeEconom, Med_level)
 {
-    BatteryManager battery = { 2.f,0,0,0,0,12,0 };
+    //BatteryManager battery = { 2.f,0,0,0,0,12,0 };
     Power current = { 5,2,3,2 };
-    flaot level = 15;
+    float level = 15;
     float ref_I = 10.8;
 bool state=false;
-    float I = type_econom(&battery, &current, level);
+    float I = type_econom(&test_manager, &current, level);
    
     float delt = (abs((I - ref_I) / 100) * 100);
     
@@ -231,10 +231,10 @@ bool state=false;
 }
 TEST(TestTimeWork, BasicTest)
 {
-    BatteryManager battery = { 2.f,0,0,0,0,12,0 };
+    //BatteryManager battery = { 2.f,0,0,0,0,12,0 };
     float i = 2;
     float l = 50;
-    float t = time_work(&battery, i, l);
+    float t = time_work(&test_manager, i, l);
     float ref_t = 0.5;
     bool state = false;
 
